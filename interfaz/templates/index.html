@@ -7,7 +7,7 @@
 		<script src="https://cdn.tailwindcss.com"></script>
 	</head>
 
-	<body class="bg-gradient-to-r from-cyan-500 to-blue-500">
+	<body>
 		<!--
 <h1>Hola mundo!!</h1>
 		<p class="text-5xl underline text-slate-200 text-clip">Hola <strong>mundo!!</strong></p>
@@ -37,20 +37,39 @@
 
 		<div class="grid place-content-center">
 			<img class="w-64" src="https://cdn-ghfll.nitrocdn.com/oYmBAtEMGThxRvPGkKNLRYJBsLHOEMRr/assets/images/optimized/rev-4cd1446/manusis4.com/wp-content/uploads/2023/08/Imagem13manusis.jpg">
-		</div>
+		</div> absolute top-10 left- w-32 h-32 absolute top-32 left-32 w-36 h-36
 		-->
 		<div class="grid grid-cols-3 grid-rows-2 h-screen">
 
-			<button class="bg-amber-300 hover:bg-amber-400 text-white font-bold border-2 border-l-0 border-t-0 border-black"
-			>Música<img class="bg-transparent padding=0" src="https://e7.pngegg.com/pngimages/653/697/png-clipart-music-icon-music-icon-music.png"></button>
-			
-			<button class="bg-cyan-300 hover:bg-blue-400 text-white font-bold border-2 border-l-0 border-t-0 border-black">Cámara</button>
+			<button class="bg-amber-300 hover:bg-amber-400 text-black font-bold border-2 border-l-0 border-t-0 border-black relative flex align-text-top text-2xl justify-start items-start">
+				<span class="absolute top-0 left-0 mt-8 ml-8">Música</span>
+				<span class="absolute top-32 left-32 w-36 h-36" style="background-image: url('https://images.vexels.com/media/users/3/184267/isolated/preview/8ec63d26d98d295993e1b29d341f1502-icono-de-notas-de-musica-transmitida.png'); background-size: cover;">
+				</span>
+			</button>
 
-			<button class="bg-lime-300 hover:bg-lime-400 text-white font-bold border-b-2 border-black">Fecha y Hora</button>
+			<button class="bg-cyan-300 hover:bg-blue-400 text-black font-bold border-2 border-l-0 border-t-0 border-black relative flex align-text-top text-2xl justify-start items-start">
+				<span class="absolute top-0 left-0 mt-8 ml-8">Cámara</span>
+				<span class="absolute top-32 left-32 w-36 h-36" style="background-image: url('https://cdn.icon-icons.com/icons2/711/PNG/512/photo-camera-1_icon-icons.com_62152.png'); background-size: cover;">
+				</span>
+			</button>
 
-			<button class="bg-green-300 hover:bg-green-400 text-white font-bold border-r-2 border-black">Clima</button>
-			<button class="bg-fuchsia-300 hover:bg-fuchsia-400 text-white font-bold border-r-2 border-black">Cronómetro</button>
-			<button class="bg-purple-300 hover:bg-purple-400 text-white font-bold">Temporizador</button>
+			<button class="bg-lime-300 hover:bg-lime-400 text-black font-bold border-2 border-l-0 border-t-0 border-black relative flex align-text-top text-2xl justify-start items-start">
+				<span class="absolute top-0 left-0 mt-8 ml-8">Fecha y Hora</span>
+				<span class="absolute top-32 left-32 w-36 h-36" style="background-image: url('https://cdn.icon-icons.com/icons2/1617/PNG/512/3700456-alarm-clock-date-time-timer-tools_108740.png'); background-size: cover;">
+			</button>
+
+			<button class="bg-green-300 hover:bg-green-400 text-black font-bold border-2 border-l-0 border-t-0 border-black relative flex align-text-top text-2xl justify-start items-start">
+				<span class="absolute top-0 left-0 mt-8 ml-8">Clima</span>
+				<span class="absolute top-32 left-32 w-36 h-36" style="background-image: url('https://cdn-icons-png.flaticon.com/512/566/566522.png'); background-size: cover;">
+			</button>
+			<button class="bg-fuchsia-300 hover:bg-fuchsia-400 text-black font-bold border-2 border-l-0 border-t-0 border-black relative flex align-text-top text-2xl justify-start items-start">
+				<span class="absolute top-0 left-0 mt-8 ml-8">Cronómetro</span>
+				<span class="absolute top-32 left-32 w-36 h-36" style="background-image: url('https://cdn-icons-png.flaticon.com/512/2928/2928750.png'); background-size: cover;">
+			</button>
+			<button class="bg-purple-300 hover:bg-purple-400 text-black font-bold border-2 border-l-0 border-t-0 border-black relative flex align-text-top text-2xl justify-start items-start">
+				<span class="absolute top-0 left-0 mt-8 ml-8">Temporizador</span>
+				<span class="absolute top-32 left-32 w-36 h-36" style="background-image: url('https://cdn-icons-png.flaticon.com/512/4578/4578995.png'); background-size: cover;">
+			</button>
 
 		</div>
 	</body>
