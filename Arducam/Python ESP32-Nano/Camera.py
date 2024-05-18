@@ -139,6 +139,7 @@ class Camera:
     CAM_REG_CAPTURE_RESOLUTION = 0x21
 
     # Some resolutions are not available - refer to datasheet https://www.arducam.com/downloads/datasheet/Arducam_MEGA_SPI_Camera_Application_Note.pdf
+
 #     RESOLUTION_160X120 = 0X00
     RESOLUTION_320X240 = 0X01
     RESOLUTION_640X480 = 0X02
@@ -268,19 +269,22 @@ class Camera:
                 self.old_pixel_format = self.current_pixel_format
                 self._write_reg(self.CAM_REG_FORMAT, self.current_pixel_format) # Set to capture a jpg
                 self._wait_idle()
+                #print('estoy en capture')
 #             print('old',self.old_resolution,'new',self.current_resolution_setting)
                 # TODO: PROPERTIES TO CONFIGURE THE RESOLUTION
             if (self.old_resolution != self.current_resolution_setting) or self.run_start_up_config:
                 self.old_resolution = self.current_resolution_setting
                 self._write_reg(self.CAM_REG_CAPTURE_RESOLUTION, self.current_resolution_setting)
 #                 print('setting res', self.current_resolution_setting)
+                #print("estoy old")
                 self._wait_idle()
             
             self.run_start_up_config = False
-            
+            #print("false")
             # Start capturing the photo
             set_cap=self._set_capture()
             print('capture complete', set_cap)
+            #print("hey papi ya tome la foto")
     
     def convert_to_base64(self, byte_list):
         try:
@@ -291,19 +295,15 @@ class Camera:
             
             # Convertir los datos de bytes a Base64
             base64_data = binascii.b2a_base64(byte_data)
-            print("Tamaño base64:", len(base64_data))
-            
-            # Escribir los datos Base64 en un archivo
-            with open("data_64.txt", "wb") as file:
-                file.write(base64_data)
-                    
-            print("Datos convertidos a Base64 y guardados en el archivo:", "data_64.txt")
             
         except Exception as e:
             print("Error:", e)
+            
+        return base64_data
 
     #Funcion Agregada para pruebas
     def read_image_data(self):
+        #self.capture_jpg()
         print("Saving RAW image data, please don't remove power")
         print("Tamaño:", self.received_length)
         
@@ -378,24 +378,6 @@ class Camera:
     def set_pixel_format(self, new_pixel_format):
         self.current_pixel_format = new_pixel_format
 
-########### ACCSESSORY FUNCTIONS ###########
-    # TODO: Complete for other camera settings
-    # Make these setters - https://github.com/CoreElectronics/CE-PiicoDev-Accelerometer-LIS3DH-MicroPython-Module/blob/abcb4337020434af010f2325b061e694b808316d/PiicoDev_LIS3DH.py#L118C1-L118C1
-    
-#     # Set Brightness
-#     CAM_REG_BRIGHTNESS_CONTROL = 0X22
-# 
-#     BRIGHTNESS_MINUS_4 = 8
-#     BRIGHTNESS_MINUS_3 = 6
-#     BRIGHTNESS_MINUS_2 = 4
-#     BRIGHTNESS_MINUS_1 = 2
-#     BRIGHTNESS_DEFAULT = 0
-#     BRIGHTNESS_PLUS_1 = 1
-#     BRIGHTNESS_PLUS_2 = 3
-#     BRIGHTNESS_PLUS_3 = 5
-#     BRIGHTNESS_PLUS_4 = 7
-
-
     def set_brightness_level(self, brightness):
         self._write_reg(self.CAM_REG_BRIGHTNESS_CONTROL, brightness)
         self._wait_idle()
@@ -404,43 +386,9 @@ class Camera:
         self._write_reg(self.CAM_REG_COLOR_EFFECT_CONTROL, effect)
         self._wait_idle()
 
-#     # Set Saturation
-#     CAM_REG_SATURATION_CONTROL = 0X24
-# 
-#     SATURATION_MINUS_3 = 6
-#     SATURATION_MINUS_2 = 4
-#     SATURATION_MINUS_1 = 2
-#     SATURATION_DEFAULT = 0
-#     SATURATION_PLUS_1 = 1
-#     SATURATION_PLUS_2 = 3
-#     SATURATION_PLUS_3 = 5
-
     def set_saturation_control(self, saturation_value):
         self._write_reg(self.CAM_REG_SATURATION_CONTROL, saturation_value)
         self._wait_idle()
-
-#     # Set Exposure Value
-#     CAM_REG_EXPOSURE_CONTROL = 0X25
-# 
-#     EXPOSURE_MINUS_3 = 6
-#     EXPOSURE_MINUS_2 = 4
-#     EXPOSURE_MINUS_1 = 2
-#     EXPOSURE_DEFAULT = 0
-#     EXPOSURE_PLUS_1 = 1
-#     EXPOSURE_PLUS_2 = 3
-#     EXPOSURE_PLUS_3 = 5
-
-
-#     # Set Contrast
-#     CAM_REG_CONTRAST_CONTROL = 0X23
-# 
-#     CONTRAST_MINUS_3 = 6
-#     CONTRAST_MINUS_2 = 4
-#     CONTRAST_MINUS_1 = 2
-#     CONTRAST_DEFAULT = 0
-#     CONTRAST_PLUS_1 = 1
-#     CONTRAST_PLUS_2 = 3
-#     CONTRAST_PLUS_3 = 5
 
     def set_contrast(self, contrast):
         self._write_reg(self.CAM_REG_CONTRAST_CONTROL, contrast)
@@ -474,16 +422,44 @@ class Camera:
     def _start_capture(self):
         self._write_reg(self.ARDUCHIP_FIFO, self.FIFO_START_MASK)
 
+    """def _set_capture(self):
+        
+        self._clear_fifo_flag()
+        
+        self._wait_idle()
+        
+        self._start_capture()
+        
+        while (self._get_bit(self.ARDUCHIP_TRIG, self.CAP_DONE_MASK) == 0):
+            sleep_ms(1)
+        print("estoy en set")
+        self.received_length = self._read_fifo_length()
+        self.total_length = self.received_length
+        print("set capture", self.total_length)
+        self.burst_first_flag = False"""
+    
     def _set_capture(self):
         self._clear_fifo_flag()
         self._wait_idle()
         self._start_capture()
-        while (self._get_bit(self.ARDUCHIP_TRIG, self.CAP_DONE_MASK) == 0):
+        
+        timeout = 5000  # 5 seconds timeout
+        start_time = utime.ticks_ms()
+        
+        print("Starting capture")
+        
+        """while (self._get_bit(self.ARDUCHIP_TRIG, self.CAP_DONE_MASK) == 0):
             sleep_ms(1)
+            if utime.ticks_diff(utime.ticks_ms(), start_time) > timeout:
+                print("Timeout waiting for capture to complete")
+                return False"""
+        
+        print("Capture complete")
         self.received_length = self._read_fifo_length()
         self.total_length = self.received_length
-        print("set capture", self.total_length)
+        print("Capture length:", self.total_length)
         self.burst_first_flag = False
+        return True
 
     
     def _read_fifo_length(self): # TODO: CONFIRM AND SWAP TO A 3 BYTE READ
